@@ -12,6 +12,7 @@ aes_ctx ctx;
 void setup(void)
 {
   aes_init(&ctx, key);
+  Serial.begin(9600);
 }
 
 void loop(void)
