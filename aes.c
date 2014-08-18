@@ -110,7 +110,6 @@ static void shift_rows(byte state[4*Nb])
   word w;
   for (i = 1; i < Nb; i += 1) {
     w = get_row(state, i);
-    /* write(STDOUT_FILENO, &w, sizeof w); */
     set_row(state, i, rrot32(w, i * 8));
   }
 }
