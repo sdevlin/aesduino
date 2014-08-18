@@ -1,10 +1,20 @@
-#include <string.h>
-
 #include "aes.h"
 
 static word rrot32(word w, unsigned int k)
 {
   return (w << (32-k)) | (w >> k);
+}
+
+static void mem_copy(void *restrict dst, const void *restrict src, int len)
+{
+  char *d;
+  const char *s;
+  int i;
+  d = dst;
+  s = src;
+  for (i = 0; i < len; i += 1) {
+    d[i] = s[i];
+  }
 }
 
 static byte S[] = {
@@ -69,7 +79,7 @@ void aes_init(aes_ctx *ctx, byte key[4*Nk])
   int i;
   word *w;
   w = ctx->w;
-  memcpy(w, key, 4 * Nk);
+  mem_copy(w, key, 4 * Nk);
   for (i = Nk; i < (Nb * (Nr+1)); i += 1) {
     word tmp = w[i-1];
     if ((i % Nk) == 0) {
@@ -216,7 +226,7 @@ void aes_encrypt(aes_ctx *ctx, byte in[4*Nb], byte out[4*Nb])
   word *wp;
 
   state = out;
-  memcpy(state, in, 4*Nb);
+  mem_copy(state, in, 4*Nb);
 
   wp = ctx->w;
   add_round_key(state, wp);
